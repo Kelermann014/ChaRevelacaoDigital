@@ -3,274 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revelação do Bebê! 👶</title>
+    <title>Chá Revelação Digital 👶🌈</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --blue-soft: #85C1E9;
-            --blue-strong: #3498DB;
-            --pink-soft: #F5B7B1;
-            --pink-strong: #E74C3C;
-            --purple: #AF7AC5;
-            --text-main: #555;
+            /* Cores Vibrantes e Alegres */
+            --bg-gradient: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            --card-white: rgba(255, 255, 255, 0.95);
+            --blue: #3498DB;
+            --pink: #E91E63;
+            --purple: #9B59B6;
+            --text: #444;
         }
-
-        * { box-sizing: border-box; }
 
         body {
-            font-family: 'Quicksand', sans-serif;
+            font-family: 'Nunito', sans-serif;
             background: var(--bg-gradient);
-            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
-            background-size: 20px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; /* Fundo se mexendo */
             margin: 0;
-            padding: 20px;
-            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
         }
 
-        .container {
-            background: var(--card-bg);
-            padding: 3rem 2rem;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
-            position: relative;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.8);
-            transition: all 0.5s ease;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
+
+        .card-container {
+            background: var(--card-white);
+            border-radius: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        /* HEADER COM IMAGEM */
+        .header-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            /* Imagem de Capa (Pézinhos/Neutro) */
+            background-image: url('http://googleusercontent.com/image_collection/image_retrieval/10648695823326270202_0'); 
+            background-position: center;
+            border-bottom: 5px solid #fff;
+        }
+
+        .content { padding: 25px; }
 
         h1 {
             font-family: 'Fredoka', sans-serif;
-            color: var(--text-main);
-            font-size: 2rem;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+            color: var(--text);
+            margin-top: 0;
+            font-size: 1.8rem;
         }
 
-        p { color: #777; font-size: 1.1rem; margin-bottom: 30px; }
+        p { color: #666; font-size: 1rem; margin-bottom: 20px; }
 
-        /* Estilo dos Botões de Escolha (Cards) */
-        .choice-grid {
-            display: grid;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .role-card {
+        /* BOTÕES ESTILIZADOS */
+        .btn-option {
             background: white;
             border: 2px solid #eee;
-            border-radius: 20px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            width: 100%;
             display: flex;
             align-items: center;
-            gap: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
             text-align: left;
         }
 
-        .role-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        .btn-option:hover {
+            transform: translateY(-3px);
             border-color: var(--purple);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .role-icon {
+        .emoji-icon {
             font-size: 2rem;
-            background: #f0f0f0;
-            width: 60px;
-            height: 60px;
+            margin-right: 15px;
+            background: #f4f4f4;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
         }
 
-        .role-text strong { display: block; font-size: 1.1rem; color: #444; }
-        .role-text span { font-size: 0.9rem; color: #888; }
+        /* Imagens de Bebês Redondas */
+        .baby-photo-reveal {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 8px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            margin: 0 auto 20px auto;
+            display: block;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-        /* Botões de Ação (Guardião) */
-        .btn-action {
-            width: 100%;
-            padding: 18px;
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Configuração do Guardião */
+        .setup-btn {
+            width: 48%;
+            padding: 15px;
             border: none;
             border-radius: 50px;
-            font-size: 1.2rem;
             font-weight: bold;
-            font-family: 'Fredoka', sans-serif;
-            cursor: pointer;
             color: white;
-            margin-bottom: 15px;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 5px;
         }
-        .btn-action:active { transform: scale(0.97); }
+        .bg-blue { background: var(--blue); }
+        .bg-pink { background: var(--pink); }
 
-        .bg-boy { background: linear-gradient(45deg, var(--blue-soft), var(--blue-strong)); }
-        .bg-girl { background: linear-gradient(45deg, var(--pink-soft), var(--pink-strong)); }
-        .bg-copy { background: #5D6D7E; }
-
-        /* Classes Utilitárias */
+        /* Estados */
         .hidden { display: none !important; }
-
-        /* Animação Suspense */
-        .pulse-container {
-            position: relative;
+        
+        .thinking-baby {
+            width: 150px;
             height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .big-heart {
-            font-size: 6rem;
-            animation: heartbeat 1s infinite;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 4px solid #eee;
         }
 
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            15% { transform: scale(1.3); }
-            30% { transform: scale(1); }
-            45% { transform: scale(1.15); }
-            60% { transform: scale(1); }
-        }
-
-        /* Revelação Final */
-        .reveal-box {
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .reveal-visible { opacity: 1; transform: scale(1); }
-
-        .result-title {
-            font-size: 3.5rem;
-            font-family: 'Fredoka', sans-serif;
-            margin: 10px 0;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-        }
-
-        .theme-boy .result-title { color: var(--blue-strong); }
-        .theme-girl .result-title { color: var(--pink-strong); }
-
-        /* Input Link */
-        .link-box {
-            background: #f4f4f4;
-            padding: 15px;
-            border-radius: 15px;
-            margin-top: 15px;
+        .link-area {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 10px;
             word-break: break-all;
             font-family: monospace;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             border: 1px dashed #ccc;
+            margin: 10px 0;
         }
+
+        /* Cores Finais */
+        .theme-boy h1 { color: var(--blue); }
+        .theme-girl h1 { color: var(--pink); }
 
     </style>
 </head>
 <body>
 
-    <div class="container" id="mainCard">
+    <div class="card-container" id="mainCard">
+        <div class="header-img"></div>
         
-        <div id="step-home">
-            <h1>Olá! Quem é você? 👋</h1>
-            <p>Selecione seu papel neste momento especial</p>
+        <div class="content">
             
-            <div class="choice-grid">
-                <div class="role-card" id="btn-guardian" onclick="handleRole('keeper')">
-                    <div class="role-icon">🤫</div>
-                    <div class="role-text">
-                        <strong>Sei o Sexo do Bebê</strong>
-                        <span>Vou criar o link da revelação</span>
+            <div id="step-home">
+                <h1>Quem é você? 🤔</h1>
+                <p>O segredo está guardado! Escolha seu perfil:</p>
+                
+                <button class="btn-option" id="btn-guardian" onclick="handleRole('keeper')">
+                    <div class="emoji-icon">🤫</div>
+                    <div>
+                        <strong>Sei o sexo do bebê</strong>
+                        <div style="font-size:0.8rem; color:#888">Criar o link da revelação</div>
                     </div>
-                </div>
+                </button>
 
-                <div class="role-card" onclick="handleRole('viewer', 6000)">
-                    <div class="role-icon">👪</div>
-                    <div class="role-text">
-                        <strong>Sou Pai / Mãe</strong>
-                        <span>Quero emoção máxima (6s)</span>
+                <button class="btn-option" onclick="handleRole('viewer', 6000)">
+                    <div class="emoji-icon">👪</div>
+                    <div>
+                        <strong>Sou o Papai / Mamãe</strong>
+                        <div style="font-size:0.8rem; color:#888">Emoção total (6 segundos)</div>
                     </div>
-                </div>
+                </button>
 
-                <div class="role-card" onclick="handleRole('viewer', 3000)">
-                    <div class="role-icon">🎉</div>
-                    <div class="role-text">
-                        <strong>Amigo / Parente</strong>
-                        <span>Revelação rápida (3s)</span>
+                <button class="btn-option" onclick="handleRole('viewer', 3000)">
+                    <div class="emoji-icon">🎉</div>
+                    <div>
+                        <strong>Amigo ou Parente</strong>
+                        <div style="font-size:0.8rem; color:#888">Ver revelação (3 segundos)</div>
                     </div>
+                </button>
+            </div>
+
+            <div id="step-setup" class="hidden">
+                <h1>O que o bebê é?</h1>
+                <p>Escolha o resultado real para gerar o link.</p>
+                
+                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                    <button class="setup-btn bg-blue" onclick="generateLink('menino')">MENINO 💙</button>
+                    <button class="setup-btn bg-pink" onclick="generateLink('menina')">MENINA 💖</button>
+                </div>
+                
+                <div id="result-link-area" class="hidden">
+                    <p style="margin-bottom:5px"><strong>Link Seguro Gerado:</strong></p>
+                    <div class="link-area" id="shareLink">...</div>
+                    <button class="setup-btn" style="background:#555; width:100%" onclick="copyLink()">Copiar Link 📋</button>
+                    <small style="display:block; margin-top:10px; color:#e74c3c">Envie ESTE link para os convidados!</small>
                 </div>
             </div>
-        </div>
 
-        <div id="step-setup" class="hidden">
-            <h1>Configurar Revelação ⚙️</h1>
-            <p>Escolha o resultado real. Isso irá gerar um link seguro.</p>
-            
-            <button class="btn-action bg-boy" onclick="generateLink('menino')">🚙 É um MENINO</button>
-            <button class="btn-action bg-girl" onclick="generateLink('menina')">🎀 É uma MENINA</button>
-            <button class="btn-action" style="background:transparent; color:#999; box-shadow:none;" onclick="location.reload()">Voltar</button>
-        </div>
-
-        <div id="step-link" class="hidden">
-            <h1>Link Criado! ✅</h1>
-            <p>O segredo está salvo neste link. Envie para a família:</p>
-            
-            <div class="link-box" id="displayLink">...</div>
-            <br>
-            <button class="btn-action bg-copy" onclick="copyLink()">Copiar para WhatsApp 📋</button>
-            <small>⚠️ Não clique no link agora se não quiser ver o resultado!</small>
-        </div>
-
-        <div id="step-suspense" class="hidden">
-            <h2 style="color:var(--text-main)">O coração dispara...</h2>
-            <div class="pulse-container">
-                <div class="big-heart">❤️</div>
+            <div id="step-suspense" class="hidden">
+                <img src="http://googleusercontent.com/image_collection/image_retrieval/13531321692865921159_0" class="thinking-baby" alt="Bebê pensando">
+                <h2 id="suspense-text" style="color:var(--purple)">Carregando fofura...</h2>
+                <div style="font-size: 2rem;" class="pulse">❤️</div>
             </div>
-            <p id="suspense-msg">Conectando com a cegonha...</p>
-        </div>
 
-        <div id="step-reveal" class="hidden">
-            <div id="reveal-content" class="reveal-box">
-                <div style="font-size: 5rem; margin-bottom: -10px;" id="reveal-emoji"></div>
-                <h1 class="result-title" id="reveal-text"></h1>
-                <p>Que venha com muita saúde! ✨</p>
-                <button class="btn-action bg-copy" style="margin-top:20px" onclick="location.reload()">Ver de novo ↺</button>
+            <div id="step-reveal" class="hidden">
+                <img id="reveal-img" class="baby-photo-reveal" src="" alt="Revelação">
+                
+                <h1 id="reveal-title" style="font-size: 2.5rem; margin-bottom:5px;"></h1>
+                <p>Parabéns Família! 🥳</p>
+                
+                <button class="btn-option" onclick="location.reload()" style="justify-content:center; background:#f9f9f9;">
+                    Ver novamente ↺
+                </button>
             </div>
-        </div>
 
-        <div id="step-error" class="hidden">
-            <div style="font-size: 4rem;">🚧</div>
-            <h1>Aguarde!</h1>
-            <p>O "Guardião do Segredo" ainda não configurou o resultado.</p>
-            <p>Peça o link oficial para quem sabe o sexo do bebê.</p>
-        </div>
+            <div id="step-error" class="hidden">
+                <div style="font-size:3rem">🚧</div>
+                <h1>Aguardando...</h1>
+                <p>O guardião ainda não configurou o sexo do bebê!</p>
+                <p>Peça o link correto para ele(a).</p>
+            </div>
 
+        </div>
     </div>
 
     <script>
-        // LÓGICA PRINCIPAL
-        const urlParams = new URLSearchParams(window.location.search);
-        const secret = urlParams.get('s'); // O segredo criptografado
+        // --- URLs das Imagens (Você pode trocar aqui se quiser) ---
+        const imgBoy = "http://googleusercontent.com/image_collection/image_retrieval/15005331326698982968_0";
+        const imgGirl = "http://googleusercontent.com/image_collection/image_retrieval/9153835030034455466_0";
+        // ---------------------------------------------------------
 
-        // Inicialização: Se tiver segredo, esconde o botão de Guardião
-        window.onload = function() {
-            if (secret) {
-                const guardianBtn = document.getElementById('btn-guardian');
-                if(guardianBtn) guardianBtn.style.display = 'none';
-            }
-        };
+        const urlParams = new URLSearchParams(window.location.search);
+        const secret = urlParams.get('s');
+
+        // Se já tem segredo na URL, esconde o botão de quem sabe o sexo
+        if (secret) {
+            const btnGuardian = document.getElementById('btn-guardian');
+            if(btnGuardian) btnGuardian.style.display = 'none';
+        }
 
         function handleRole(role, delay) {
             if (role === 'keeper') {
@@ -284,107 +273,73 @@
             }
         }
 
-        // Gera o link codificado
         function generateLink(gender) {
-            const code = btoa(gender); // Transforma em Base64
-            // Pega a URL limpa (sem parametros antigos) e adiciona o novo
-            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            const code = btoa(gender);
+            const cleanUrl = window.location.href.split('?')[0];
             const finalUrl = `${cleanUrl}?s=${code}`;
             
-            document.getElementById('displayLink').innerText = finalUrl;
-            showScreen('step-link');
+            document.getElementById('shareLink').innerText = finalUrl;
+            document.getElementById('result-link-area').classList.remove('hidden');
         }
 
         function copyLink() {
-            const linkText = document.getElementById('displayLink').innerText;
-            navigator.clipboard.writeText(linkText).then(() => {
-                alert("Link copiado! Agora é só colar no WhatsApp! 🎈");
-            });
+            const text = document.getElementById('shareLink').innerText;
+            navigator.clipboard.writeText(text).then(() => alert("Link copiado! Mande no Zap! 🎈"));
         }
 
-        // Animação de Suspense
-        function startSuspense(totalTime) {
+        function startSuspense(time) {
             showScreen('step-suspense');
+            const texts = ["Analisando DNA...", "Consultando a cegonha...", "Será menino?", "Será menina?", "Preparados?"];
+            let i = 0;
             
-            const messages = [
-                "Analisando ultrassom...",
-                "Contando os pezinhos...",
-                "O coração tá batendo forte!",
-                "É agora..."
-            ];
-            
-            let counter = 0;
             const interval = setInterval(() => {
-                document.getElementById('suspense-msg').innerText = messages[counter % messages.length];
-                counter++;
-            }, 1000);
+                document.getElementById('suspense-text').innerText = texts[i % texts.length];
+                i++;
+            }, 800);
 
             setTimeout(() => {
                 clearInterval(interval);
-                revealResult();
-            }, totalTime);
+                revealNow();
+            }, time);
         }
 
-        // Lógica da Revelação
-        function revealResult() {
+        function revealNow() {
             try {
-                const gender = atob(secret); // Decodifica
-                const container = document.getElementById('mainCard');
-                const revealDiv = document.getElementById('reveal-content');
-                
+                const gender = atob(secret);
+                const revealImg = document.getElementById('reveal-img');
+                const revealTitle = document.getElementById('reveal-title');
+                const mainCard = document.getElementById('mainCard');
+
                 showScreen('step-reveal');
 
                 if (gender === 'menino') {
-                    document.getElementById('reveal-text').innerText = "MENINO!";
-                    document.getElementById('reveal-emoji').innerText = "🧢";
-                    container.classList.add('theme-boy');
+                    revealTitle.innerText = "É UM MENINO!";
+                    revealImg.src = imgBoy;
+                    mainCard.classList.add('theme-boy');
                     fireConfetti('#3498DB'); // Azul
                 } else if (gender === 'menina') {
-                    document.getElementById('reveal-text').innerText = "MENINA!";
-                    document.getElementById('reveal-emoji').innerText = "👑";
-                    container.classList.add('theme-girl');
-                    fireConfetti('#E74C3C'); // Rosa
+                    revealTitle.innerText = "É UMA MENINA!";
+                    revealImg.src = imgGirl;
+                    mainCard.classList.add('theme-girl');
+                    fireConfetti('#E91E63'); // Rosa
                 }
-
-                // Animação de entrada (Pop-up)
-                setTimeout(() => {
-                    revealDiv.classList.add('reveal-visible');
-                }, 100);
 
             } catch (e) {
                 showScreen('step-error');
             }
         }
 
-        // Efeito de Confetes
         function fireConfetti(color) {
-            const duration = 3000;
-            const end = Date.now() + duration;
-
+            const end = Date.now() + 3000;
             (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: [color, '#ffffff']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: [color, '#ffffff']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: [color, 'white'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: [color, 'white'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
 
         function showScreen(id) {
-            document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+            document.querySelectorAll('.content > div').forEach(div => div.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
     </script>
