@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revelação do Bebê! 👶</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --blue: #85C1E9;
+            --pink: #F5B7B1;
+            --neutral: #FCF3CF;
+            --text: #5D6D7E;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+        }
+
+        .btn:active { transform: scale(0.98); }
+
+        .btn-blue { background-color: var(--blue); }
+        .btn-pink { background-color: var(--pink); }
+        .btn-neutral { background-color: #F7DC6F; color: #555; }
+        .btn-start { background-color: #A569BD; }
+
+        .hidden { display: none; }
+
+        /* Animação de Suspense */
+        .heartbeat {
+            font-size: 5rem;
+            color: #E74C3C;
+            animation: beat 0.8s infinite alternate;
+            margin: 20px 0;
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.2); }
+        }
+
+        /* Estilo do Input de Link */
+        #shareLink {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-family: monospace;
+        }
+
+        /* Resultado */
+        .result-text {
+            font-size: 2.5rem;
+            font-family: 'Fredoka One', cursive;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+        
+        .show-result {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .boy-theme { border: 5px solid var(--blue); background: #EBF5FB; }
+        .girl-theme { border: 5px solid var(--pink); background: #FDEDEC; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainCard">
+        <div id="step-role">
+            <h1>Quem é você? 🤔</h1>
+            <p>Selecione abaixo para participar da revelação!</p>
+            <button class="btn btn-neutral" onclick="handleRole('keeper')">🤫 Eu sei o sexo do bebê</button>
+            <button class="btn btn-start" onclick="handleRole('viewer', 5000)">👨‍👩‍👧 Sou o Pai / Mãe</button>
+            <button class="btn btn-blue" onclick="handleRole('viewer', 3000)">🎉 Amigo / Parente</button>
+        </div>
+
+        <div id="step-setup" class="hidden">
+            <h1>Guardião do Segredo 🤫</h1>
+            <p>Selecione o resultado real. Isso irá gerar um link secreto.</p>
+            <button class="btn btn-blue" onclick="generateLink('menino')">💙 É um MENINO!</button>
+            <button class="btn btn-pink" onclick="generateLink('menina')">💖 É uma MENINA!</button>
+            
+            <div id="linkArea" class="hidden">
+                <p><strong>Link gerado!</strong> Copie e mande no WhatsApp:</p>
+                <input type="text" id="shareLink" readonly>
+                <button class="btn btn-neutral" onclick="copyLink()">📋 Copiar Link</button>
+                <small style="color: #888; display:block; margin-top:5px;">(Teste o link em outra aba antes de enviar!)</small>
+            </div>
+        </div>
+
+        <div id="step-suspense" class="hidden">
+            <h1>O bebê é...</h1>
+            <div class="heartbeat">❤️</div>
+            <p id="suspense-text">Analisando fofura...</p>
+        </div>
+
+        <div id="step-reveal" class="hidden">
+            <div id="reveal-icon" style="font-size: 4rem;"></div>
+            <div class="result-text" id="result-text"></div>
+            <p>Parabéns à família! 🎉</p>
+        </div>
+
+        <div id="step-error" class="hidden">
+            <h1 style="color: #E67E22">Ops! 🚧</h1>
+            <p>O "Guardião do Segredo" ainda não configurou o resultado!</p>
+            <p>Espere ele gerar o link oficial e te enviar.</p>
+            <button class="btn btn-neutral" onclick="location.reload()">Tentar novamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Função para pegar parâmetros da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        // O segredo está codificado em base64 para não dar spoiler na URL visualmente
+        const secret = urlParams.get('s'); 
+
+        function handleRole(role, delayTime) {
+            if (role === 'keeper') {
+                showScreen('step-setup');
+            } else {
+                // Se for pai/amigo, verifica se tem segredo na URL
+                if (!secret) {
+                    showScreen('step-error');
+                } else {
+                    startReveal(delayTime);
+                }
+            }
+        }
+
+        function generateLink(gender) {
+            // Codifica 'menino' ou 'menina' para base64
+            const code = btoa(gender); 
+            const newUrl = `${window.location.origin}${window.location.pathname}?s=${code}`;
+            
+            const linkInput = document.getElementById('shareLink');
+            linkInput.value = newUrl;
+            
+            document.getElementById('linkArea').classList.remove('hidden');
+        }
+
+        function copyLink() {
+            const copyText = document.getElementById("shareLink");
+            copyText.select();
+            document.execCommand("copy");
+            alert("Link copiado! Agora mande no grupo da família! 🎈");
+        }
+
+        function startReveal(delay) {
+            showScreen('step-suspense');
+            
+            // Textos de suspense mudando
+            const phrases = ["Lendo DNA...", "Contando dedinhos...", "Quase lá...", "Preparados?"];
+            let i = 0;
+            const textInterval = setInterval(() => {
+                document.getElementById('suspense-text').innerText = phrases[i++ % phrases.length];
+            }, 800);
+
+            setTimeout(() => {
+                clearInterval(textInterval);
+                revealNow();
+            }, delay);
+        }
+
+        function revealNow() {
+            try {
+                // Decodifica o segredo
+                const gender = atob(secret);
+                
+                showScreen('step-reveal');
+                const card = document.getElementById('mainCard');
+                const resultText = document.getElementById('result-text');
+                const icon = document.getElementById('reveal-icon');
+
+                if (gender === 'menino') {
+                    card.classList.add('boy-theme');
+                    resultText.innerText = "É UM MENINO! 💙";
+                    icon.innerText = "🚙";
+                    resultText.style.color = "#2980B9";
+                    triggerConfetti('#85C1E9');
+                } else if (gender === 'menina') {
+                    card.classList.add('girl-theme');
+                    resultText.innerText = "É UMA MENINA! 💖";
+                    icon.innerText = "🎀";
+                    resultText.style.color = "#C0392B";
+                    triggerConfetti('#F5B7B1');
+                } else {
+                    throw new Error("Inválido");
+                }
+
+                // Animação CSS do texto
+                setTimeout(() => resultText.classList.add('show-result'), 100);
+
+            } catch (e) {
+                showScreen('step-error');
+            }
+        }
+
+        function triggerConfetti(colorHex) {
+            // Dispara confetes por 3 segundos
+            var duration = 3000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: [colorHex, '#ffffff']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: [colorHex, '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function showScreen(id) {
+            // Esconde todas as divs diretas do container
+            const screens = document.querySelectorAll('.container > div');
+            screens.forEach(s => s.classList.add('hidden'));
+            // Mostra a desejada
+            document.getElementById(id).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
