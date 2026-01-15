@@ -5,246 +5,361 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Revelação do Bebê! 👶</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --blue: #85C1E9;
-            --pink: #F5B7B1;
-            --neutral: #FCF3CF;
-            --text: #5D6D7E;
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --blue-soft: #85C1E9;
+            --blue-strong: #3498DB;
+            --pink-soft: #F5B7B1;
+            --pink-strong: #E74C3C;
+            --purple: #AF7AC5;
+            --text-main: #555;
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg-gradient);
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
             overflow: hidden;
         }
 
         .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            padding: 3rem 2rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
             text-align: center;
-            max-width: 400px;
-            width: 90%;
+            max-width: 450px;
+            width: 100%;
             position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.8);
             transition: all 0.5s ease;
         }
 
         h1 {
-            font-family: 'Fredoka One', cursive;
-            color: var(--text);
-            margin-bottom: 20px;
+            font-family: 'Fredoka', sans-serif;
+            color: var(--text-main);
+            font-size: 2rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
         }
 
-        .btn {
-            display: block;
+        p { color: #777; font-size: 1.1rem; margin-bottom: 30px; }
+
+        /* Estilo dos Botões de Escolha (Cards) */
+        .choice-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .role-card {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: var(--purple);
+        }
+
+        .role-icon {
+            font-size: 2rem;
+            background: #f0f0f0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .role-text strong { display: block; font-size: 1.1rem; color: #444; }
+        .role-text span { font-size: 0.9rem; color: #888; }
+
+        /* Botões de Ação (Guardião) */
+        .btn-action {
             width: 100%;
-            padding: 15px;
-            margin: 10px 0;
+            padding: 18px;
             border: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
+            font-family: 'Fredoka', sans-serif;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
             color: white;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+        .btn-action:active { transform: scale(0.97); }
 
-        .btn:active { transform: scale(0.98); }
+        .bg-boy { background: linear-gradient(45deg, var(--blue-soft), var(--blue-strong)); }
+        .bg-girl { background: linear-gradient(45deg, var(--pink-soft), var(--pink-strong)); }
+        .bg-copy { background: #5D6D7E; }
 
-        .btn-blue { background-color: var(--blue); }
-        .btn-pink { background-color: var(--pink); }
-        .btn-neutral { background-color: #F7DC6F; color: #555; }
-        .btn-start { background-color: #A569BD; }
+        /* Classes Utilitárias */
+        .hidden { display: none !important; }
 
-        .hidden { display: none; }
-
-        /* Animação de Suspense */
-        .heartbeat {
-            font-size: 5rem;
-            color: #E74C3C;
-            animation: beat 0.8s infinite alternate;
-            margin: 20px 0;
-        }
-
-        @keyframes beat {
-            to { transform: scale(1.2); }
-        }
-
-        /* Estilo do Input de Link */
-        #shareLink {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-family: monospace;
-        }
-
-        /* Resultado */
-        .result-text {
-            font-size: 2.5rem;
-            font-family: 'Fredoka One', cursive;
-            margin: 20px 0;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s ease;
+        /* Animação Suspense */
+        .pulse-container {
+            position: relative;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .show-result {
-            opacity: 1;
-            transform: translateY(0);
+        .big-heart {
+            font-size: 6rem;
+            animation: heartbeat 1s infinite;
         }
 
-        .boy-theme { border: 5px solid var(--blue); background: #EBF5FB; }
-        .girl-theme { border: 5px solid var(--pink); background: #FDEDEC; }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+        }
+
+        /* Revelação Final */
+        .reveal-box {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .reveal-visible { opacity: 1; transform: scale(1); }
+
+        .result-title {
+            font-size: 3.5rem;
+            font-family: 'Fredoka', sans-serif;
+            margin: 10px 0;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .theme-boy .result-title { color: var(--blue-strong); }
+        .theme-girl .result-title { color: var(--pink-strong); }
+
+        /* Input Link */
+        .link-box {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px dashed #ccc;
+        }
 
     </style>
 </head>
 <body>
 
     <div class="container" id="mainCard">
-        <div id="step-role">
-            <h1>Quem é você? 🤔</h1>
-            <p>Selecione abaixo para participar da revelação!</p>
-            <button class="btn btn-neutral" onclick="handleRole('keeper')">🤫 Eu sei o sexo do bebê</button>
-            <button class="btn btn-start" onclick="handleRole('viewer', 5000)">👨‍👩‍👧 Sou o Pai / Mãe</button>
-            <button class="btn btn-blue" onclick="handleRole('viewer', 3000)">🎉 Amigo / Parente</button>
-        </div>
-
-        <div id="step-setup" class="hidden">
-            <h1>Guardião do Segredo 🤫</h1>
-            <p>Selecione o resultado real. Isso irá gerar um link secreto.</p>
-            <button class="btn btn-blue" onclick="generateLink('menino')">💙 É um MENINO!</button>
-            <button class="btn btn-pink" onclick="generateLink('menina')">💖 É uma MENINA!</button>
+        
+        <div id="step-home">
+            <h1>Olá! Quem é você? 👋</h1>
+            <p>Selecione seu papel neste momento especial</p>
             
-            <div id="linkArea" class="hidden">
-                <p><strong>Link gerado!</strong> Copie e mande no WhatsApp:</p>
-                <input type="text" id="shareLink" readonly>
-                <button class="btn btn-neutral" onclick="copyLink()">📋 Copiar Link</button>
-                <small style="color: #888; display:block; margin-top:5px;">(Teste o link em outra aba antes de enviar!)</small>
+            <div class="choice-grid">
+                <div class="role-card" id="btn-guardian" onclick="handleRole('keeper')">
+                    <div class="role-icon">🤫</div>
+                    <div class="role-text">
+                        <strong>Sei o Sexo do Bebê</strong>
+                        <span>Vou criar o link da revelação</span>
+                    </div>
+                </div>
+
+                <div class="role-card" onclick="handleRole('viewer', 6000)">
+                    <div class="role-icon">👪</div>
+                    <div class="role-text">
+                        <strong>Sou Pai / Mãe</strong>
+                        <span>Quero emoção máxima (6s)</span>
+                    </div>
+                </div>
+
+                <div class="role-card" onclick="handleRole('viewer', 3000)">
+                    <div class="role-icon">🎉</div>
+                    <div class="role-text">
+                        <strong>Amigo / Parente</strong>
+                        <span>Revelação rápida (3s)</span>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <div id="step-setup" class="hidden">
+            <h1>Configurar Revelação ⚙️</h1>
+            <p>Escolha o resultado real. Isso irá gerar um link seguro.</p>
+            
+            <button class="btn-action bg-boy" onclick="generateLink('menino')">🚙 É um MENINO</button>
+            <button class="btn-action bg-girl" onclick="generateLink('menina')">🎀 É uma MENINA</button>
+            <button class="btn-action" style="background:transparent; color:#999; box-shadow:none;" onclick="location.reload()">Voltar</button>
+        </div>
+
+        <div id="step-link" class="hidden">
+            <h1>Link Criado! ✅</h1>
+            <p>O segredo está salvo neste link. Envie para a família:</p>
+            
+            <div class="link-box" id="displayLink">...</div>
+            <br>
+            <button class="btn-action bg-copy" onclick="copyLink()">Copiar para WhatsApp 📋</button>
+            <small>⚠️ Não clique no link agora se não quiser ver o resultado!</small>
+        </div>
+
         <div id="step-suspense" class="hidden">
-            <h1>O bebê é...</h1>
-            <div class="heartbeat">❤️</div>
-            <p id="suspense-text">Analisando fofura...</p>
+            <h2 style="color:var(--text-main)">O coração dispara...</h2>
+            <div class="pulse-container">
+                <div class="big-heart">❤️</div>
+            </div>
+            <p id="suspense-msg">Conectando com a cegonha...</p>
         </div>
 
         <div id="step-reveal" class="hidden">
-            <div id="reveal-icon" style="font-size: 4rem;"></div>
-            <div class="result-text" id="result-text"></div>
-            <p>Parabéns à família! 🎉</p>
+            <div id="reveal-content" class="reveal-box">
+                <div style="font-size: 5rem; margin-bottom: -10px;" id="reveal-emoji"></div>
+                <h1 class="result-title" id="reveal-text"></h1>
+                <p>Que venha com muita saúde! ✨</p>
+                <button class="btn-action bg-copy" style="margin-top:20px" onclick="location.reload()">Ver de novo ↺</button>
+            </div>
         </div>
 
         <div id="step-error" class="hidden">
-            <h1 style="color: #E67E22">Ops! 🚧</h1>
-            <p>O "Guardião do Segredo" ainda não configurou o resultado!</p>
-            <p>Espere ele gerar o link oficial e te enviar.</p>
-            <button class="btn btn-neutral" onclick="location.reload()">Tentar novamente</button>
+            <div style="font-size: 4rem;">🚧</div>
+            <h1>Aguarde!</h1>
+            <p>O "Guardião do Segredo" ainda não configurou o resultado.</p>
+            <p>Peça o link oficial para quem sabe o sexo do bebê.</p>
         </div>
+
     </div>
 
     <script>
-        // Função para pegar parâmetros da URL
+        // LÓGICA PRINCIPAL
         const urlParams = new URLSearchParams(window.location.search);
-        // O segredo está codificado em base64 para não dar spoiler na URL visualmente
-        const secret = urlParams.get('s'); 
+        const secret = urlParams.get('s'); // O segredo criptografado
 
-        function handleRole(role, delayTime) {
+        // Inicialização: Se tiver segredo, esconde o botão de Guardião
+        window.onload = function() {
+            if (secret) {
+                const guardianBtn = document.getElementById('btn-guardian');
+                if(guardianBtn) guardianBtn.style.display = 'none';
+            }
+        };
+
+        function handleRole(role, delay) {
             if (role === 'keeper') {
                 showScreen('step-setup');
             } else {
-                // Se for pai/amigo, verifica se tem segredo na URL
                 if (!secret) {
                     showScreen('step-error');
                 } else {
-                    startReveal(delayTime);
+                    startSuspense(delay);
                 }
             }
         }
 
+        // Gera o link codificado
         function generateLink(gender) {
-            // Codifica 'menino' ou 'menina' para base64
-            const code = btoa(gender); 
-            const newUrl = `${window.location.origin}${window.location.pathname}?s=${code}`;
+            const code = btoa(gender); // Transforma em Base64
+            // Pega a URL limpa (sem parametros antigos) e adiciona o novo
+            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            const finalUrl = `${cleanUrl}?s=${code}`;
             
-            const linkInput = document.getElementById('shareLink');
-            linkInput.value = newUrl;
-            
-            document.getElementById('linkArea').classList.remove('hidden');
+            document.getElementById('displayLink').innerText = finalUrl;
+            showScreen('step-link');
         }
 
         function copyLink() {
-            const copyText = document.getElementById("shareLink");
-            copyText.select();
-            document.execCommand("copy");
-            alert("Link copiado! Agora mande no grupo da família! 🎈");
+            const linkText = document.getElementById('displayLink').innerText;
+            navigator.clipboard.writeText(linkText).then(() => {
+                alert("Link copiado! Agora é só colar no WhatsApp! 🎈");
+            });
         }
 
-        function startReveal(delay) {
+        // Animação de Suspense
+        function startSuspense(totalTime) {
             showScreen('step-suspense');
             
-            // Textos de suspense mudando
-            const phrases = ["Lendo DNA...", "Contando dedinhos...", "Quase lá...", "Preparados?"];
-            let i = 0;
-            const textInterval = setInterval(() => {
-                document.getElementById('suspense-text').innerText = phrases[i++ % phrases.length];
-            }, 800);
+            const messages = [
+                "Analisando ultrassom...",
+                "Contando os pezinhos...",
+                "O coração tá batendo forte!",
+                "É agora..."
+            ];
+            
+            let counter = 0;
+            const interval = setInterval(() => {
+                document.getElementById('suspense-msg').innerText = messages[counter % messages.length];
+                counter++;
+            }, 1000);
 
             setTimeout(() => {
-                clearInterval(textInterval);
-                revealNow();
-            }, delay);
+                clearInterval(interval);
+                revealResult();
+            }, totalTime);
         }
 
-        function revealNow() {
+        // Lógica da Revelação
+        function revealResult() {
             try {
-                // Decodifica o segredo
-                const gender = atob(secret);
+                const gender = atob(secret); // Decodifica
+                const container = document.getElementById('mainCard');
+                const revealDiv = document.getElementById('reveal-content');
                 
                 showScreen('step-reveal');
-                const card = document.getElementById('mainCard');
-                const resultText = document.getElementById('result-text');
-                const icon = document.getElementById('reveal-icon');
 
                 if (gender === 'menino') {
-                    card.classList.add('boy-theme');
-                    resultText.innerText = "É UM MENINO! 💙";
-                    icon.innerText = "🚙";
-                    resultText.style.color = "#2980B9";
-                    triggerConfetti('#85C1E9');
+                    document.getElementById('reveal-text').innerText = "MENINO!";
+                    document.getElementById('reveal-emoji').innerText = "🧢";
+                    container.classList.add('theme-boy');
+                    fireConfetti('#3498DB'); // Azul
                 } else if (gender === 'menina') {
-                    card.classList.add('girl-theme');
-                    resultText.innerText = "É UMA MENINA! 💖";
-                    icon.innerText = "🎀";
-                    resultText.style.color = "#C0392B";
-                    triggerConfetti('#F5B7B1');
-                } else {
-                    throw new Error("Inválido");
+                    document.getElementById('reveal-text').innerText = "MENINA!";
+                    document.getElementById('reveal-emoji').innerText = "👑";
+                    container.classList.add('theme-girl');
+                    fireConfetti('#E74C3C'); // Rosa
                 }
 
-                // Animação CSS do texto
-                setTimeout(() => resultText.classList.add('show-result'), 100);
+                // Animação de entrada (Pop-up)
+                setTimeout(() => {
+                    revealDiv.classList.add('reveal-visible');
+                }, 100);
 
             } catch (e) {
                 showScreen('step-error');
             }
         }
 
-        function triggerConfetti(colorHex) {
-            // Dispara confetes por 3 segundos
-            var duration = 3000;
-            var end = Date.now() + duration;
+        // Efeito de Confetes
+        function fireConfetti(color) {
+            const duration = 3000;
+            const end = Date.now() + duration;
 
             (function frame() {
                 confetti({
@@ -252,14 +367,14 @@
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
-                    colors: [colorHex, '#ffffff']
+                    colors: [color, '#ffffff']
                 });
                 confetti({
                     particleCount: 5,
                     angle: 120,
                     spread: 55,
                     origin: { x: 1 },
-                    colors: [colorHex, '#ffffff']
+                    colors: [color, '#ffffff']
                 });
 
                 if (Date.now() < end) {
@@ -269,10 +384,7 @@
         }
 
         function showScreen(id) {
-            // Esconde todas as divs diretas do container
-            const screens = document.querySelectorAll('.container > div');
-            screens.forEach(s => s.classList.add('hidden'));
-            // Mostra a desejada
+            document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
     </script>
